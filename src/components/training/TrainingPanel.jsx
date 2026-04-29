@@ -4,6 +4,7 @@ import ScenarioCard from './ScenarioCard';
 import ScenarioDetail from './ScenarioDetail';
 import { createDefaultSwitchState } from '@/lib/switchState';
 import { BookOpen, Terminal as TerminalIcon } from 'lucide-react';
+import VlanStatusPanel from './VlanStatusPanel';
 
 export default function TrainingPanel({ switchState, onLoadScenario }) {
   const [activeScenarioId, setActiveScenarioId] = useState(null);
@@ -71,6 +72,9 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
           </div>
         )}
       </div>
+
+      {/* VLAN Status */}
+      <VlanStatusPanel switchState={switchState} />
 
       {/* Footer */}
       <div className="px-4 py-2 border-t border-slate-800/80">
