@@ -32,6 +32,7 @@ export function executeCommand(input, switchState, mode, currentInterface, comma
     case 'globalConfig': return executeGlobalConfig(cmd, args, trimmed, switchState);
     case 'interfaceConfig': return executeInterfaceConfig(cmd, args, trimmed, switchState, currentInterface);
     case 'vlanConfig': return executeVlanConfig(cmd, args, switchState, currentInterface);
+    case 'lineConfig': return executeLineConfig(cmd, args, switchState);
     default: return { output: invalidCommand(trimmed) };
   }
 }
@@ -282,6 +283,22 @@ function executeInterfaceConfig(cmd, args, raw, state, currentInterface) {
   }
   if (cmd === 'end') {
     return { output: '', newMode: 'privileged', newCurrentInterface: null };
+  }
+  return { output: invalidCommand(cmd) };
+}
+
+function executeLineConfig(cmd, args, state) {
+  if (cmd === 'password') {
+    return { output: '' };
+  }
+  if (cmd === 'login') {
+    return { output: '' };
+  }
+  if (cmd === 'exit') {
+    return { output: '', newMode: 'globalConfig' };
+  }
+  if (cmd === 'end') {
+    return { output: '', newMode: 'privileged' };
   }
   return { output: invalidCommand(cmd) };
 }

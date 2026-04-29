@@ -74,10 +74,10 @@ export default function Terminal({ onStateChange, onModeChange, externalState })
       setCommandHistory(prev => [...prev, input]);
       setHistoryIndex(-1);
 
-      const result = executeCommand(input, switchState, mode, currentInterface, commandHistory);
+      const result = executeCommand(input, switchState, mode, currentInterface, commandHistory) || {};
 
-      if (result.output) {
-        const outputTextLines = result.output.split('\n').map(text => ({ type: 'output', text }));
+      if (result.output != null && result.output !== '') {
+        const outputTextLines = String(result.output).split('\n').map(text => ({ type: 'output', text }));
         setOutputLines(prev => [...prev, ...outputTextLines]);
       }
 
