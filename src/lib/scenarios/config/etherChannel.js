@@ -1,0 +1,37 @@
+export default {
+  id: 'etherchannel',
+  title: 'EtherChannel (LACP)',
+  difficulty: 'Advanced',
+  duration: '20 min',
+  description: 'Bundle two GigabitEthernet uplinks into a single logical EtherChannel using LACP (802.3ad). This doubles bandwidth and provides link redundancy between switches.',
+  objectives: [
+    'Configure Gi0/1 in LACP active mode, channel-group 1',
+    'Configure Gi0/2 in LACP active mode, channel-group 1',
+    'Verify the EtherChannel bundle with "show etherchannel summary"',
+  ],
+  hints: [
+    'Both interfaces must have identical configuration before bundling',
+    'LACP active mode initiates negotiation: "channel-group 1 mode active"',
+    'Apply the same command to both Gi0/1 and Gi0/2',
+    'Verify with "show etherchannel summary" — look for the (SU) flag meaning layer2 + in-use',
+  ],
+  commands: [
+    { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
+    { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
+    { cmd: 'interface GigabitEthernet0/1', why: 'Enter the first interface to bundle. Both uplinks must be in the same channel-group number.' },
+    { cmd: 'channel-group 1 mode active', why: 'Assigns Gi0/1 to EtherChannel group 1 using LACP active mode. Active mode actively sends LACP packets to negotiate the bundle with the remote switch.' },
+    { cmd: 'exit', why: 'Return to Global Configuration mode.' },
+    { cmd: 'interface GigabitEthernet0/2', why: 'Enter the second interface. It must join the same group (1) with the same LACP mode.' },
+    { cmd: 'channel-group 1 mode active', why: 'Assigns Gi0/2 to group 1. Once both ports are in active mode, LACP negotiates the Port-Channel bundle automatically.' },
+    { cmd: 'end', why: 'Return to Privileged EXEC mode.' },
+    { cmd: 'show etherchannel summary', why: 'Displays all EtherChannel groups, their member ports, and status flags. Look for (P) meaning bundled and (SU) on the Port-Channel meaning Layer2 and in-use.' },
+    { cmd: 'show running-config', why: 'Verify both Gi0/1 and Gi0/2 show "channel-group 1 mode active".' },
+  ],
+  validation: (state) => [
+    { label: 'Gi0/1 assigned to channel-group 1', pass: state.interfaces['GigabitEthernet0/1']?.channelGroup === 1 },
+    { label: 'Gi0/1 LACP mode is active', pass: state.interfaces['GigabitEthernet0/1']?.channelGroupMode === 'active' },
+    { label: 'Gi0/2 assigned to channel-group 1', pass: state.interfaces['GigabitEthernet0/2']?.channelGroup === 1 },
+    { label: 'Gi0/2 LACP mode is active', pass: state.interfaces['GigabitEthernet0/2']?.channelGroupMode === 'active' },
+  ],
+  initialState: null,
+};

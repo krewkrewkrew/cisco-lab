@@ -1,0 +1,38 @@
+export default {
+  id: 'vtp-config',
+  title: 'VTP Configuration',
+  difficulty: 'Intermediate',
+  duration: '10 min',
+  description: 'Configure VLAN Trunking Protocol (VTP) to allow centralized VLAN management across multiple switches. Set up this switch as a VTP server with a domain and password.',
+  objectives: [
+    'Set VTP domain name to "CORP"',
+    'Set VTP mode to "server"',
+    'Set VTP password to "vtp123"',
+    'Set VTP version to 2',
+    'Verify with "show vtp status"',
+  ],
+  hints: [
+    'All VTP commands start with "vtp" in global config mode',
+    'Set domain first: "vtp domain CORP"',
+    'Set mode: "vtp mode server"',
+    'Set password: "vtp password vtp123"',
+    'Verify: "show vtp status"',
+  ],
+  commands: [
+    { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
+    { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
+    { cmd: 'vtp domain CORP', why: 'Sets the VTP domain name. All switches sharing VLANs via VTP must be in the same domain. VTP advertisements are only accepted from switches with matching domain names.' },
+    { cmd: 'vtp mode server', why: 'Server mode allows creating, modifying and deleting VLANs. VTP servers propagate VLAN info to all clients in the domain.' },
+    { cmd: 'vtp password vtp123', why: 'Adds a password to VTP advertisements. Switches must have the same password to accept VTP updates — prevents unauthorized switches from modifying VLANs.' },
+    { cmd: 'vtp version 2', why: 'VTP version 2 supports Token Ring VLANs and has better consistency checking than version 1. Use v2 unless you have legacy requirements.' },
+    { cmd: 'end', why: 'Return to Privileged EXEC mode.' },
+    { cmd: 'show vtp status', why: 'Displays VTP domain, mode, version, and revision number. Verify all settings are correct.' },
+  ],
+  validation: (state) => [
+    { label: 'VTP domain set to "CORP"', pass: state.vtpDomain === 'CORP' },
+    { label: 'VTP mode is server', pass: state.vtpMode === 'server' },
+    { label: 'VTP password configured', pass: !!state.vtpPassword },
+    { label: 'VTP version 2 configured', pass: state.vtpVersion === 2 },
+  ],
+  initialState: null,
+};
