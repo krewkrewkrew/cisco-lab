@@ -49,7 +49,7 @@ export default function ScenarioDetail({ scenario, validationResults, onStart, o
             return (
               <div key={i} className="flex items-start gap-2">
                 {passed ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
+                  <Circle className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" style={{ fill: 'currentColor' }} />
                 ) : (
                   <Circle className="w-3.5 h-3.5 text-slate-600 mt-0.5 shrink-0" />
                 )}
