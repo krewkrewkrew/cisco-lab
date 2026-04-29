@@ -32,7 +32,7 @@ export const scenarios = [
       return [
         { label: 'Enter Privileged EXEC mode using "enable"', pass: !!state.visitedPrivileged },
         { label: 'Enter Global Configuration mode using "configure terminal"', pass: !!state.visitedGlobalConfig },
-        { label: 'Change the hostname to "MySwitch"', pass: state.hostname === 'MySwitch' },
+        { label: 'Change the hostname to "MySwitch"', pass: state.hostname?.toLowerCase() === 'myswitch' },
         { label: 'Return to Privileged EXEC mode using "end"', pass: !!state.returnedToPrivileged },
         { label: 'View the running configuration', pass: !!state.viewedRunningConfig },
       ];
