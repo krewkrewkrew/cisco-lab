@@ -1,15 +1,18 @@
 import React, { useState, useMemo } from 'react';
-import { scenarios } from '@/lib/scenarios';
+import { scenarios, troubleshootingScenarios } from '@/lib/scenarios';
 import ScenarioCard from './ScenarioCard';
 import ScenarioDetail from './ScenarioDetail';
 import { createDefaultSwitchState } from '@/lib/switchState';
-import { BookOpen, Terminal as TerminalIcon } from 'lucide-react';
+import { BookOpen, Terminal as TerminalIcon, Wrench } from 'lucide-react';
 import VlanStatusPanel from './VlanStatusPanel';
+
+const allScenarios = [...scenarios, ...troubleshootingScenarios];
 
 export default function TrainingPanel({ switchState, onLoadScenario }) {
   const [activeScenarioId, setActiveScenarioId] = useState(null);
+  const [tab, setTab] = useState('config');
 
-  const activeScenario = scenarios.find(s => s.id === activeScenarioId);
+  const activeScenario = allScenarios.find(s => s.id === activeScenarioId);
 
   const validationResults = useMemo(() => {
     if (!activeScenario || !switchState) return null;
@@ -37,13 +40,30 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
           <h2 className="text-sm font-semibold text-slate-200">Training Labs</h2>
         </div>
         <p className="text-[10px] text-slate-500 mt-1">Select a scenario to practice Cisco IOS commands</p>
+        {/* Tabs */}
+        {!activeScenario && (
+          <div className="flex mt-2 gap-1">
+            <button
+              onClick={() => setTab('config')}
+              className={`flex-1 flex items-center justify-center gap-1 py-1 text-[10px] rounded font-medium transition-colors ${tab === 'config' ? 'bg-accent/20 text-accent' : 'text-slate-500 hover:text-slate-300'}`}
+            >
+              <BookOpen className="w-3 h-3" /> Config Labs
+            </button>
+            <button
+              onClick={() => setTab('troubleshoot')}
+              className={`flex-1 flex items-center justify-center gap-1 py-1 text-[10px] rounded font-medium transition-colors ${tab === 'troubleshoot' ? 'bg-amber-500/20 text-amber-400' : 'text-slate-500 hover:text-slate-300'}`}
+            >
+              <Wrench className="w-3 h-3" /> Troubleshooting
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto terminal-scroll">
         {/* Scenario list */}
         {!activeScenario && (
           <div className="p-3 space-y-2">
-            {scenarios.map(scenario => (
+            {(tab === 'config' ? scenarios : troubleshootingScenarios).map(scenario => (
               <ScenarioCard
                 key={scenario.id}
                 scenario={scenario}

@@ -833,7 +833,7 @@ function handleShow(args, state, history) {
   if (sub === 'ip') {
     const sub2 = args[1]?.toLowerCase();
     if (sub2 === 'interface') {
-      if (args[2] === 'brief' || args[2] === 'br' || !args[2]) return { output: showIpInterfaceBrief(state) };
+      if (args[2] === 'brief' || args[2] === 'br' || !args[2]) return { output: showIpInterfaceBrief(state), newState: { ...state, viewedInterfaceBrief: true } };
       const ifaceName = resolveInterfaceName(args.slice(2).join(''));
       if (ifaceName && state.interfaces[ifaceName]) return { output: showIpInterfaceDetail(state, ifaceName) };
       return { output: showIpInterfaceBrief(state) };
