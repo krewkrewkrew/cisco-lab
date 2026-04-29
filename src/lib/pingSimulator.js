@@ -72,8 +72,9 @@ export function simulatePing(target, switchState, count = 5) {
   );
 
   if (svis.length === 0) {
-    // No layer-3 config at all — can't route
-    return `${header}\n${'.' .repeat(count)}\nSuccess rate is 0 percent (0/${count})`;
+    // No layer-3 config — switch is operating at layer 2 only
+    const dots = '.'.repeat(count);
+    return `${header}\n${dots}\nSuccess rate is 0 percent (0/${count})\n\n% No IP address configured on any interface.\n  Configure an SVI (e.g. interface Vlan1 / ip address 192.168.1.1 255.255.255.0) to enable layer-3 connectivity.`;
   }
 
   for (const svi of svis) {
@@ -85,19 +86,21 @@ export function simulatePing(target, switchState, count = 5) {
     }
 
     if (inSameSubnet(target, svi.ipAddress, svi.subnetMask)) {
-      // Check for broadcast address — no reply
+      // Broadcast address — no reply
       const bcast = getBroadcast(svi.ipAddress, svi.subnetMask);
       if (targetInt === bcast) {
-        return `${header}\n${'.' .repeat(count)}\nSuccess rate is 0 percent (0/${count})\n% Broadcast address, no reply expected.`;
+        const dots = '.'.repeat(count);
+        return `${header}\n${dots}\nSuccess rate is 0 percent (0/${count})\n\n% Destination host unreachable — broadcast address, no ICMP reply expected.`;
       }
 
-      // Target is on a directly connected subnet — simulate as reachable
+      // Target is on a directly connected subnet — reachable
       return buildSuccess(header, count);
     }
   }
 
-  // Target is not on any directly connected subnet
-  return `${header}\n${'.' .repeat(count)}\nSuccess rate is 0 percent (0/${count})\n% Network not in routing table.`;
+  // Target not on any directly connected subnet — ICMP host unreachable
+  const uDots = 'U'.repeat(count);
+  return `${header}\n${uDots}\nSuccess rate is 0 percent (0/${count})\n\n% Destination host unreachable.\n  No route to ${target} found in routing table.\n  Verify the destination IP and ensure a gateway or static route is configured.`;
 }
 
 function buildSuccess(header, count) {
