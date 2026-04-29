@@ -226,6 +226,10 @@ function executeInterfaceConfig(cmd, args, raw, state, currentInterface) {
     if (args[0] === 'shutdown') {
       return updateIface({ status: 'up', protocol: 'up' });
     }
+    if (args[0] === 'switchport' && args.length === 1) {
+      // Convert physical interface to routed (layer-3) mode
+      return updateIface({ switchportMode: 'routed', accessVlan: 0, trunkAllowedVlans: '' });
+    }
     if (args[0] === 'switchport' && args[1] === 'access' && args[2] === 'vlan') {
       return updateIface({ accessVlan: 1 });
     }
@@ -236,6 +240,10 @@ function executeInterfaceConfig(cmd, args, raw, state, currentInterface) {
       return updateIface({ description: '' });
     }
     return { output: '' };
+  }
+  if (cmd === 'switchport' && args.length === 0) {
+    // Re-enable switchport mode on a routed interface
+    return updateIface({ switchportMode: 'access', accessVlan: 1, ipAddress: 'unassigned', subnetMask: '' });
   }
   if (cmd === 'description') {
     const desc = args.join(' ');
@@ -267,6 +275,16 @@ function executeInterfaceConfig(cmd, args, raw, state, currentInterface) {
   if (cmd === 'ip') {
     if (args[0] === 'address') {
       if (args.length < 3) return { output: '% Incomplete command.' };
+      // Physical switchport interfaces need 'no switchport' first
+      const isPhysical = currentInterface.startsWith('FastEthernet') || currentInterface.startsWith('GigabitEthernet');
+      if (isPhysical && iface.switchportMode !== 'routed') {
+        return { output: '% IP addresses may not be configured on L2 links.\n  Use "no switchport" to convert this to a routed interface first.' };
+      }
+      // Basic IP/mask validation
+      const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
+      if (!ipRegex.test(args[1]) || !ipRegex.test(args[2])) {
+        return { output: '% Invalid IP address or subnet mask.' };
+      }
       return updateIface({ ipAddress: args[1], subnetMask: args[2] });
     }
     return { output: '% Incomplete command.' };

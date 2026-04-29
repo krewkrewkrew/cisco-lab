@@ -61,14 +61,14 @@ export function simulatePing(target, switchState, count = 5) {
 
   const targetInt = ipToInt(target);
 
-  // Collect all UP SVIs with an assigned IP
+  // Collect all UP layer-3 interfaces: SVIs and routed physical ports
   const svis = Object.values(switchState.interfaces).filter(
     iface =>
-      iface.name.startsWith('Vlan') &&
       iface.status === 'up' &&
       iface.ipAddress &&
       iface.ipAddress !== 'unassigned' &&
-      iface.subnetMask
+      iface.subnetMask &&
+      (iface.name.startsWith('Vlan') || iface.switchportMode === 'routed')
   );
 
   if (svis.length === 0) {
