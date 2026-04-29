@@ -39,7 +39,8 @@ export function executeCommand(input, switchState, mode, currentInterface, comma
 
 function executeUserMode(cmd, args, state, history) {
   if (cmd === 'enable' || cmd === 'en') {
-    return { output: '', newMode: 'privileged' };
+    const newState = { ...state, visitedPrivileged: true };
+    return { output: '', newMode: 'privileged', newState };
   }
   if (cmd === 'exit' || cmd === 'logout') {
     return { output: 'Connection closed.', newMode: 'user' };
@@ -57,7 +58,8 @@ function executeUserMode(cmd, args, state, history) {
 function executePrivilegedMode(cmd, args, raw, state, history) {
   if (cmd === 'configure' || cmd === 'conf') {
     if (args.length === 0 || args[0].startsWith('t')) {
-      return { output: 'Enter configuration commands, one per line.  End with CNTL/Z.', newMode: 'globalConfig' };
+      const newState = { ...state, visitedGlobalConfig: true };
+      return { output: 'Enter configuration commands, one per line.  End with CNTL/Z.', newMode: 'globalConfig', newState };
     }
     return { output: '% Incomplete command.' };
   }
@@ -198,7 +200,7 @@ function executeGlobalConfig(cmd, args, raw, state) {
     return { output: '' };
   }
   if (cmd === 'end') {
-    return { output: '', newMode: 'privileged' };
+    return { output: '', newMode: 'privileged', newState: { ...state, returnedToPrivileged: true } };
   }
   if (cmd === 'exit') {
     return { output: '', newMode: 'privileged' };
@@ -339,7 +341,7 @@ function handleShow(args, state, history) {
     return { output: formatHelp(showHelp) };
   }
   if (sub === 'version' || sub === 'ver') return { output: showVersion(state) };
-  if (sub === 'running-config' || sub === 'run') return { output: showRunningConfig(state) };
+  if (sub === 'running-config' || sub === 'run') return { output: showRunningConfig(state), newState: { ...state, viewedRunningConfig: true } };
   if (sub === 'startup-config' || sub === 'start') return { output: showStartupConfig(state) };
   if (sub === 'interfaces' || sub === 'int') {
     if (args[1]) {

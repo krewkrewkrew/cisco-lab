@@ -29,10 +29,13 @@ export const scenarios = [
       { cmd: 'show running-config', why: 'Displays the current active configuration in RAM. Use this to verify every change you make.' },
     ],
     validation: (state) => {
-      const checks = [
-        { label: 'Hostname changed to "MySwitch"', pass: state.hostname === 'MySwitch' },
+      return [
+        { label: 'Enter Privileged EXEC mode using "enable"', pass: !!state.visitedPrivileged },
+        { label: 'Enter Global Configuration mode using "configure terminal"', pass: !!state.visitedGlobalConfig },
+        { label: 'Change the hostname to "MySwitch"', pass: state.hostname === 'MySwitch' },
+        { label: 'Return to Privileged EXEC mode using "end"', pass: !!state.returnedToPrivileged },
+        { label: 'View the running configuration', pass: !!state.viewedRunningConfig },
       ];
-      return checks;
     },
     initialState: null, // Use default
   },
