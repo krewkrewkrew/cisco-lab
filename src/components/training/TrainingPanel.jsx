@@ -1,0 +1,84 @@
+import React, { useState, useMemo } from 'react';
+import { scenarios } from '@/lib/scenarios';
+import ScenarioCard from './ScenarioCard';
+import ScenarioDetail from './ScenarioDetail';
+import { createDefaultSwitchState } from '@/lib/switchState';
+import { BookOpen, Terminal as TerminalIcon } from 'lucide-react';
+
+export default function TrainingPanel({ switchState, onLoadScenario }) {
+  const [activeScenarioId, setActiveScenarioId] = useState(null);
+
+  const activeScenario = scenarios.find(s => s.id === activeScenarioId);
+
+  const validationResults = useMemo(() => {
+    if (!activeScenario || !switchState) return null;
+    return activeScenario.validation(switchState);
+  }, [activeScenario, switchState]);
+
+  const handleStart = () => {
+    if (!activeScenario) return;
+    const state = activeScenario.initialState || createDefaultSwitchState();
+    onLoadScenario(state);
+  };
+
+  const handleReset = () => {
+    const state = createDefaultSwitchState();
+    onLoadScenario(state);
+    setActiveScenarioId(null);
+  };
+
+  return (
+    <div className="h-full flex flex-col" style={{ backgroundColor: '#0a0f1a' }}>
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-slate-800/80">
+        <div className="flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-accent" />
+          <h2 className="text-sm font-semibold text-slate-200">Training Labs</h2>
+        </div>
+        <p className="text-[10px] text-slate-500 mt-1">Select a scenario to practice Cisco IOS commands</p>
+      </div>
+
+      <div className="flex-1 overflow-y-auto terminal-scroll">
+        {/* Scenario list */}
+        {!activeScenario && (
+          <div className="p-3 space-y-2">
+            {scenarios.map(scenario => (
+              <ScenarioCard
+                key={scenario.id}
+                scenario={scenario}
+                isActive={activeScenarioId === scenario.id}
+                onClick={() => setActiveScenarioId(scenario.id)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Active scenario detail */}
+        {activeScenario && (
+          <div className="p-4">
+            <button
+              onClick={() => setActiveScenarioId(null)}
+              className="text-[10px] text-slate-500 hover:text-slate-300 mb-3 flex items-center gap-1"
+            >
+              ← Back to scenarios
+            </button>
+            <ScenarioDetail
+              scenario={activeScenario}
+              validationResults={validationResults}
+              onStart={handleStart}
+              onReset={handleReset}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-4 py-2 border-t border-slate-800/80">
+        <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
+          <TerminalIcon className="w-3 h-3" />
+          <span>Cisco IOS Simulator v1.0</span>
+        </div>
+      </div>
+    </div>
+  );
+}
