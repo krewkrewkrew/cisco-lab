@@ -823,6 +823,15 @@ function handleShow(args, state, history) {
       if (rest[0] === 'trunk') return { output: showInterfacesTrunk(state) };
       if (rest[0] === 'summary') return { output: showInterfacesSummary(state) };
       if (rest[0] === 'counters') return { output: showInterfacesCounters(state) };
+      // show interfaces <name> switchport
+      const lastToken = rest[rest.length - 1]?.toLowerCase();
+      if (lastToken === 'switchport') {
+        const ifaceName2 = resolveInterfaceName(rest.slice(0, -1).join(''));
+        if (ifaceName2 && state.interfaces[ifaceName2]) {
+          const iface2 = state.interfaces[ifaceName2];
+          return { output: `Name: ${iface2.name}\nSwitchport: Enabled\nAdministrative Mode: ${iface2.switchportMode === 'trunk' ? 'trunk' : iface2.switchportMode === 'routed' ? 'routed' : 'static access'}\nOperational Mode: ${iface2.switchportMode === 'trunk' ? 'trunk' : 'static access'}\nAdministrative Trunking Encapsulation: dot1q\nOperational Trunking Encapsulation: dot1q\nNegotiation of Trunking: Off\nAccess Mode VLAN: ${iface2.accessVlan || 1} (${(state.vlans[iface2.accessVlan || 1]?.name) || 'default'})\nTrunking Native Mode VLAN: ${iface2.nativeVlan || 1} (${(state.vlans[iface2.nativeVlan || 1]?.name) || 'default'})\nTrunking VLANs Enabled: ${iface2.trunkAllowedVlans || 'ALL'}` };
+        }
+      }
       const ifaceName = resolveInterfaceName(rest.join(''));
       if (ifaceName && state.interfaces[ifaceName]) return { output: showInterfaces(state, ifaceName) };
       return { output: `% Invalid input detected at '^' marker.` };
