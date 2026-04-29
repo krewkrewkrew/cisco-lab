@@ -3,7 +3,7 @@ import React from 'react';
 export default function TerminalOutput({ lines }) {
   return (
     <div className="whitespace-pre-wrap">
-      {lines.map((line, i) => (
+      {lines.filter(Boolean).map((line, i) => (
         <div key={i} className="leading-5">
           {line.type === 'input' ? (
             <span>
