@@ -1,4 +1,5 @@
 import { resolveInterfaceName } from './switchState';
+import { simulatePing } from './pingSimulator';
 import { getHelpForMode, showHelp, getCompletions } from './commandHelp';
 import {
   showVersion, showInterfaces, showIpInterfaceBrief,
@@ -50,7 +51,7 @@ function executeUserMode(cmd, args, state, history) {
   }
   if (cmd === 'ping') {
     if (args.length === 0) return { output: '% Incomplete command.' };
-    return { output: `Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to ${args[0]}, timeout is 2 seconds:\n.....\nSuccess rate is 0 percent (0/5)` };
+    return { output: simulatePing(args[0], state) };
   }
   return { output: invalidCommand(cmd) };
 }
@@ -87,7 +88,7 @@ function executePrivilegedMode(cmd, args, raw, state, history) {
   }
   if (cmd === 'ping') {
     if (args.length === 0) return { output: '% Incomplete command.' };
-    return { output: `Type escape sequence to abort.\nSending 5, 100-byte ICMP Echos to ${args[0]}, timeout is 2 seconds:\n.....\nSuccess rate is 0 percent (0/5)` };
+    return { output: simulatePing(args[0], state) };
   }
   if (cmd === 'traceroute') {
     if (args.length === 0) return { output: '% Incomplete command.' };
