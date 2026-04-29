@@ -83,6 +83,11 @@ export function createDefaultSwitchState() {
     enableSecret: '',
     consolePassword: '',
     bannerMotd: '',
+    syslog: [
+      { seq: 1,  ts: '*Apr 29 00:00:01.000', facility: '%SYS-5-CONFIG_I',     msg: 'Configured from console by console' },
+      { seq: 2,  ts: '*Apr 29 00:00:02.000', facility: '%LINK-3-UPDOWN',       msg: 'Interface FastEthernet0/1, changed state to up' },
+      { seq: 3,  ts: '*Apr 29 00:00:03.000', facility: '%LINEPROTO-5-UPDOWN',  msg: 'Line protocol on Interface FastEthernet0/1, changed state to up' },
+    ],
     vlans: {
       1: { id: 1, name: 'default', status: 'active', ports: [] },
       1002: { id: 1002, name: 'fddi-default', status: 'act/unsup', ports: [] },
@@ -180,4 +185,17 @@ export function computePortHealth(iface, switchState) {
   }
 
   return { protocol: 'up', reason: null };
+}
+
+/**
+ * Append a syslog entry to state and return the updated syslog array.
+ */
+export function appendSyslog(state, facility, msg) {
+  const now = new Date();
+  const pad = (n, w = 2) => String(n).padStart(w, '0');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const ts = `*${months[now.getMonth()]} ${now.getDate()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${pad(now.getMilliseconds(), 3)}`;
+  const existing = state.syslog || [];
+  const seq = existing.length ? existing[existing.length - 1].seq + 1 : 1;
+  return [...existing, { seq, ts, facility, msg }];
 }

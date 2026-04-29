@@ -1,10 +1,11 @@
-import { resolveInterfaceName, computePortHealth } from './switchState';
+import { resolveInterfaceName, computePortHealth, appendSyslog } from './switchState';
 import { simulatePing } from './pingSimulator';
 import { getHelpForMode, showHelp, getCompletions } from './commandHelp';
 import {
   showVersion, showInterfaces, showIpInterfaceBrief,
   showVlanBrief, showRunningConfig, showStartupConfig,
   showHistory, showClock, showSpanningTree, showMacAddressTable, showArp,
+  showLog,
 } from './showCommands';
 
 // Parse and execute a command, return { output, newState, newMode, newCurrentInterface }
@@ -78,7 +79,8 @@ function executePrivilegedMode(cmd, args, raw, state, history) {
   }
   if (cmd === 'write') {
     if (args.length === 0 || args[0] === 'memory' || args[0] === 'mem') {
-      const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false };
+      const newSyslog = appendSyslog(state, '%SYS-5-CONFIG_I', 'Configured from console by console');
+      const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false, syslog: newSyslog };
       return { output: 'Building configuration...\n[OK]', newState, persist: true };
     }
     return { output: '% Incomplete command.' };
@@ -217,17 +219,30 @@ function executeInterfaceConfig(cmd, args, raw, state, currentInterface) {
     const newInterfaces = { ...state.interfaces };
     const updatedIface = { ...iface, ...updates };
     newInterfaces[currentInterface] = updatedIface;
-    const newState = { ...state, interfaces: newInterfaces, configChanged: true };
+    let newState = { ...state, interfaces: newInterfaces, configChanged: true };
 
     // Compute health after change and emit syslog-style warning if protocol goes down
     const health = computePortHealth(updatedIface, newState);
+    const shortName = updatedIface.shortName || currentInterface;
     let syslog = extraOutput;
+
     if (health.protocol === 'down' && updatedIface.status !== 'down') {
-      const shortName = updatedIface.shortName || currentInterface;
-      syslog += `\n%LINEPROTO-5-UPDOWN: Line protocol on Interface ${shortName}, changed state to down\n${health.reason ? `  Reason: ${health.reason}` : ''}`;
+      const msg = `Line protocol on Interface ${shortName}, changed state to down`;
+      newState = { ...newState, syslog: appendSyslog(newState, '%LINEPROTO-5-UPDOWN', msg) };
+      syslog += `\n%LINEPROTO-5-UPDOWN: ${msg}${health.reason ? `\n  Reason: ${health.reason}` : ''}`;
     } else if (health.protocol === 'up' && iface.status === 'down' && updates.status === 'up') {
-      const shortName = updatedIface.shortName || currentInterface;
-      syslog += `\n%LINEPROTO-5-UPDOWN: Line protocol on Interface ${shortName}, changed state to up`;
+      const msg = `Line protocol on Interface ${shortName}, changed state to up`;
+      newState = { ...newState, syslog: appendSyslog(newState, '%LINEPROTO-5-UPDOWN', msg) };
+      syslog += `\n%LINEPROTO-5-UPDOWN: ${msg}`;
+    }
+
+    // Log shutdown/no shutdown as LINK events
+    if (updates.status === 'down') {
+      const msg = `Interface ${shortName}, changed state to administratively down`;
+      newState = { ...newState, syslog: appendSyslog(newState, '%LINK-5-CHANGED', msg) };
+    } else if (updates.status === 'up' && iface.status === 'down') {
+      const msg = `Interface ${shortName}, changed state to up`;
+      newState = { ...newState, syslog: appendSyslog(newState, '%LINK-3-UPDOWN', msg) };
     }
 
     return { output: syslog.trim(), newState };
@@ -406,6 +421,7 @@ function handleShow(args, state, history) {
   if (sub === 'spanning-tree' || sub === 'span') return { output: showSpanningTree(state) };
   if (sub === 'mac-address-table' || sub === 'mac') return { output: showMacAddressTable() };
   if (sub === 'arp') return { output: showArp() };
+  if (sub === 'log' || sub === 'logging') return { output: showLog(state) };
   
   return { output: `% Invalid input detected at '^' marker.` };
 }
@@ -415,7 +431,8 @@ function handleCopy(args, state) {
     const src = args[0].toLowerCase();
     const dst = args[1].toLowerCase();
     if ((src === 'running-config' || src === 'run') && (dst === 'startup-config' || dst === 'start')) {
-      const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false };
+      const newSyslog = appendSyslog(state, '%SYS-5-CONFIG_I', 'Configured from console by console');
+      const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false, syslog: newSyslog };
       return { output: 'Destination filename [startup-config]? \nBuilding configuration...\n[OK]', newState, persist: true };
     }
   }

@@ -78,6 +78,7 @@ export const showHelp = {
   'spanning-tree': 'Spanning tree topology',
   'startup-config': 'Contents of startup configuration',
   'version': 'System hardware and software status',
+  'log': 'Display the contents of the logging buffer',
   'vlan': 'VTP VLAN status',
   'vtp': 'VTP information',
 };

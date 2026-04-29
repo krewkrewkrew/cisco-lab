@@ -1,5 +1,17 @@
 import { getVlanPorts, computePortHealth } from './switchState';
 
+export function showLog(state) {
+  const logs = state.syslog || [];
+  if (logs.length === 0) return 'Syslog logging: enabled (0 messages logged)';
+  const header = [
+    'Syslog logging: enabled',
+    `Log Buffer (4096 bytes):`,
+    '',
+  ];
+  const entries = logs.map(e => `${e.ts}: ${e.facility}: ${e.msg}`);
+  return [...header, ...entries].join('\n');
+}
+
 export function showVersion(state) {
   return `Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.2(7)E2, RELEASE SOFTWARE (fc3)
 Technical Support: http://www.cisco.com/techsupport
