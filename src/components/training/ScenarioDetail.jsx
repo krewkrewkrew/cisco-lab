@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Circle, Lightbulb, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import CommandGuide from './CommandGuide';
+import ContextHint from './ContextHint';
 
 export default function ScenarioDetail({ scenario, validationResults, onStart, onReset }) {
   const [showHints, setShowHints] = useState(false);
@@ -69,6 +70,9 @@ export default function ScenarioDetail({ scenario, validationResults, onStart, o
           </p>
         </div>
       )}
+
+      {/* Context-aware hint for current failing objective */}
+      <ContextHint scenario={scenario} validationResults={validationResults} />
 
       {/* Command Guide */}
       <CommandGuide commands={scenario.commands} />
