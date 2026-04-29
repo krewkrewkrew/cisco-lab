@@ -21,6 +21,13 @@ export const scenarios = [
       'Type "end" to return to Privileged EXEC',
       'Use "show running-config" to verify your changes',
     ],
+    commands: [
+      { cmd: 'enable', why: 'Moves from User EXEC (Switch>) to Privileged EXEC (Switch#). You need this before making any configuration changes.' },
+      { cmd: 'configure terminal', why: 'Enters Global Configuration mode (Switch(config)#). All device-wide settings are changed from here.' },
+      { cmd: 'hostname MySwitch', why: 'Changes the switch\'s display name. The prompt immediately updates to reflect the new hostname.' },
+      { cmd: 'end', why: 'Jumps directly back to Privileged EXEC from any config mode. Equivalent to pressing Ctrl+Z on a real switch.' },
+      { cmd: 'show running-config', why: 'Displays the current active configuration in RAM. Use this to verify every change you make.' },
+    ],
     validation: (state) => {
       const checks = [
         { label: 'Hostname changed to "MySwitch"', pass: state.hostname === 'MySwitch' },
@@ -48,6 +55,17 @@ export const scenarios = [
       'Use "interface fa0/1" then "switchport access vlan 10"',
       'Repeat for each port or range',
       'Use "show vlan brief" to verify assignments',
+    ],
+    commands: [
+      { cmd: 'enable', why: 'Enter Privileged EXEC mode first.' },
+      { cmd: 'configure terminal', why: 'Enter Global Configuration mode to start making changes.' },
+      { cmd: 'vlan 10', why: 'Creates VLAN 10 and enters VLAN config mode. VLANs are how you segment a switch into isolated broadcast domains.' },
+      { cmd: 'name SALES', why: 'Assigns a human-readable name to VLAN 10 so you can identify it in show commands.' },
+      { cmd: 'vlan 20', why: 'Creates VLAN 20 for the Engineering team.' },
+      { cmd: 'name ENGINEERING', why: 'Names VLAN 20. Exit back to Global Config automatically after naming.' },
+      { cmd: 'interface FastEthernet0/1', why: 'Enters interface configuration mode for port Fa0/1 so you can assign it to a VLAN.' },
+      { cmd: 'switchport access vlan 10', why: 'Assigns this port to VLAN 10. Any device plugged in here will be on the SALES network.' },
+      { cmd: 'show vlan brief', why: 'Confirms which ports belong to which VLANs. Run this after every assignment to verify.' },
     ],
     validation: (state) => {
       const checks = [
@@ -79,6 +97,17 @@ export const scenarios = [
       'Set trunk mode: "switchport mode trunk"',
       'Add description: "description Uplink to Core Switch"',
     ],
+    commands: [
+      { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
+      { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
+      { cmd: 'vlan 10', why: 'Create VLAN 10 — trunk ports carry all VLANs, so they must exist first.' },
+      { cmd: 'name SALES', why: 'Name VLAN 10 for clarity.' },
+      { cmd: 'vlan 20', why: 'Create VLAN 20.' },
+      { cmd: 'name ENGINEERING', why: 'Name VLAN 20.' },
+      { cmd: 'interface GigabitEthernet0/1', why: 'GigabitEthernet ports are typically used for uplinks because of their higher bandwidth.' },
+      { cmd: 'switchport mode trunk', why: 'A trunk port carries traffic for multiple VLANs simultaneously using 802.1Q tagging. Access ports carry only one VLAN.' },
+      { cmd: 'description Uplink to Core Switch', why: 'Always document trunk ports so future admins know what is connected.' },
+    ],
     validation: (state) => {
       return [
         { label: 'VLAN 10 exists', pass: !!state.vlans[10] },
@@ -109,6 +138,15 @@ export const scenarios = [
       'Use "description Server Room Link" to add descriptions',
       'Use "show ip interface brief" to check status',
     ],
+    commands: [
+      { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
+      { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
+      { cmd: 'interface FastEthernet0/20', why: 'Target the first unused port you want to shut down.' },
+      { cmd: 'shutdown', why: 'Administratively disables the port. Best practice: always shut down unused ports to prevent unauthorized access.' },
+      { cmd: 'interface FastEthernet0/1', why: 'Move to the port connected to the server room.' },
+      { cmd: 'description Server Room Link', why: 'Labels this port in the config and show commands. Essential for troubleshooting in a real network.' },
+      { cmd: 'show ip interface brief', why: 'Compact table showing every interface, its IP (if any), and its up/down status. The fastest way to see overall port health.' },
+    ],
     validation: (state) => {
       return [
         { label: 'Fa0/20 is shutdown', pass: state.interfaces['FastEthernet0/20']?.status === 'down' },
@@ -136,6 +174,16 @@ export const scenarios = [
       'Return to privileged EXEC mode',
       'Use "copy running-config startup-config" or "write memory"',
       'Verify with "show startup-config"',
+    ],
+    commands: [
+      { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
+      { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
+      { cmd: 'hostname LabSwitch', why: 'Change the hostname as required by the lab.' },
+      { cmd: 'vlan 100', why: 'Create VLAN 100 for the management network.' },
+      { cmd: 'name MANAGEMENT', why: 'Name VLAN 100. The management VLAN is used for remote switch administration.' },
+      { cmd: 'end', why: 'Return to Privileged EXEC. You must be in Privileged EXEC to save the configuration.' },
+      { cmd: 'copy running-config startup-config', why: 'Saves the running config (in RAM) to startup config (in NVRAM). Without this, all changes are lost when the switch reboots.' },
+      { cmd: 'show startup-config', why: 'Confirms what will be loaded on the next reboot. Always verify after saving.' },
     ],
     validation: (state) => {
       return [
