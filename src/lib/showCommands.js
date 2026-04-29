@@ -1,4 +1,4 @@
-import { getVlanPorts } from './switchState';
+import { getVlanPorts, computePortHealth } from './switchState';
 
 export function showVersion(state) {
   return `Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.2(7)E2, RELEASE SOFTWARE (fc3)
@@ -32,8 +32,9 @@ export function showInterfaces(state, specific) {
   
   for (const [name, iface] of Object.entries(ifaces)) {
     if (!iface) continue;
+    const health = computePortHealth(iface, state);
     const status = iface.status === 'up' ? 'up' : 'administratively down';
-    const proto = iface.status === 'up' ? 'up' : 'down';
+    const proto = health.protocol;
     
     lines.push(`${name} is ${status}, line protocol is ${proto}`);
     if (iface.description) lines.push(`  Description: ${iface.description}`);
@@ -67,12 +68,13 @@ function subnetToPrefix(mask) {
 export function showIpInterfaceBrief(state) {
   let output = 'Interface                  IP-Address      OK? Method Status                Protocol\n';
   for (const iface of Object.values(state.interfaces)) {
+    const health = computePortHealth(iface, state);
     const name = iface.name.padEnd(27);
     const ip = (iface.ipAddress || 'unassigned').padEnd(16);
     const ok = 'YES'.padEnd(4);
-    const method = 'manual'.padEnd(7);
+    const method = (iface.ipAddress && iface.ipAddress !== 'unassigned' ? 'manual' : 'unset ').padEnd(7);
     const status = (iface.status === 'up' ? 'up' : 'administratively down').padEnd(22);
-    const proto = iface.status === 'up' ? 'up' : 'down';
+    const proto = health.protocol;
     output += `${name}${ip}${ok}${method}${status}${proto}\n`;
   }
   return output;

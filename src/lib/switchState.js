@@ -131,3 +131,53 @@ export function getVlanPorts(switchState, vlanId) {
   }
   return ports;
 }
+
+/**
+ * Compute the effective line protocol status for an interface.
+ * Returns { protocol: 'up'|'down', reason: string|null }
+ * This does NOT modify state — it is used at display time.
+ */
+export function computePortHealth(iface, switchState) {
+  // Admin-shutdown always down
+  if (iface.status === 'down') return { protocol: 'down', reason: null };
+
+  const isPhysical = iface.name.startsWith('FastEthernet') || iface.name.startsWith('GigabitEthernet');
+
+  if (isPhysical) {
+    // Routed port with no IP → line protocol down
+    if (iface.switchportMode === 'routed') {
+      if (!iface.ipAddress || iface.ipAddress === 'unassigned') {
+        return { protocol: 'down', reason: 'not connected (routed port has no IP address)' };
+      }
+      return { protocol: 'up', reason: null };
+    }
+
+    // Access port assigned to a VLAN that doesn't exist → line protocol down
+    if (iface.switchportMode === 'access') {
+      const vid = iface.accessVlan;
+      if (vid && vid !== 1 && !switchState.vlans[vid]) {
+        return { protocol: 'down', reason: `not connected (access VLAN ${vid} does not exist)` };
+      }
+    }
+
+    // Trunk port — healthy if trunk VLANs exist (simplified: always up if not shutdown)
+    return { protocol: 'up', reason: null };
+  }
+
+  // SVI (Vlan interface): up only if the VLAN exists and has at least one active access port
+  if (iface.name.startsWith('Vlan')) {
+    const vlanId = parseInt(iface.name.replace('Vlan', ''));
+    if (!switchState.vlans[vlanId]) {
+      return { protocol: 'down', reason: `not connected (VLAN ${vlanId} does not exist)` };
+    }
+    const hasActivePorts = Object.values(switchState.interfaces).some(
+      p => p.switchportMode === 'access' && p.accessVlan === vlanId && p.status === 'up'
+    );
+    if (!hasActivePorts && vlanId !== 1) {
+      return { protocol: 'down', reason: `not connected (no active ports in VLAN ${vlanId})` };
+    }
+    return { protocol: 'up', reason: null };
+  }
+
+  return { protocol: 'up', reason: null };
+}
