@@ -81,13 +81,43 @@ export function showIpInterfaceBrief(state) {
 export function showVlanBrief(state) {
   let output = '\nVLAN Name                             Status    Ports\n';
   output += '---- -------------------------------- --------- -------------------------------\n';
-  
-  for (const vlan of Object.values(state.vlans)) {
+
+  // Sort VLANs by ID for consistent display
+  const sortedVlans = Object.values(state.vlans).sort((a, b) => a.id - b.id);
+
+  for (const vlan of sortedVlans) {
     const id = String(vlan.id).padEnd(5);
-    const name = vlan.name.padEnd(33);
+    const name = vlan.name.slice(0, 32).padEnd(33);
     const status = vlan.status.padEnd(10);
-    const ports = getVlanPorts(state, vlan.id).join(', ');
-    output += `${id}${name}${status}${ports}\n`;
+
+    // Get short port names (Fa0/1, Gi0/1) and abbreviate them
+    const allPorts = getVlanPorts(state, vlan.id).map(p =>
+      p.replace('FastEthernet', 'Fa').replace('GigabitEthernet', 'Gi')
+    );
+
+    // Wrap ports at 31 chars per line, continuation lines indented
+    const WRAP = 31;
+    const portLines = [];
+    let current = '';
+    for (const port of allPorts) {
+      const candidate = current ? `${current}, ${port}` : port;
+      if (candidate.length > WRAP && current) {
+        portLines.push(current);
+        current = port;
+      } else {
+        current = candidate;
+      }
+    }
+    if (current) portLines.push(current);
+
+    if (portLines.length === 0) {
+      output += `${id}${name}${status}\n`;
+    } else {
+      output += `${id}${name}${status}${portLines[0]}\n`;
+      for (let i = 1; i < portLines.length; i++) {
+        output += `${''.padEnd(49)}${portLines[i]}\n`;
+      }
+    }
   }
   return output;
 }
