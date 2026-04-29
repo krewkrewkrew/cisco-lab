@@ -5,11 +5,21 @@ import { bootLines } from '@/lib/bootBanner';
 import { executeCommand, tabComplete, getPrompt } from '@/lib/commandParser';
 import { createDefaultSwitchState } from '@/lib/switchState';
 
+const STORAGE_KEY = 'cisco-sim-startup-config';
+
+function loadSavedState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch {}
+  return null;
+}
+
 export default function Terminal({ onStateChange, onModeChange, externalState }) {
   const [outputLines, setOutputLines] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
   const [mode, setMode] = useState('user');
-  const [switchState, setSwitchState] = useState(createDefaultSwitchState);
+  const [switchState, setSwitchState] = useState(() => loadSavedState() || createDefaultSwitchState());
   const [currentInterface, setCurrentInterface] = useState(null);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -35,6 +45,7 @@ export default function Terminal({ onStateChange, onModeChange, externalState })
   // Handle external state reset (from scenarios)
   useEffect(() => {
     if (externalState) {
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setSwitchState(externalState);
       setMode('user');
       setCurrentInterface(null);
@@ -81,7 +92,12 @@ export default function Terminal({ onStateChange, onModeChange, externalState })
         setOutputLines(prev => [...prev, ...outputTextLines]);
       }
 
-      if (result.newState) setSwitchState(result.newState);
+      if (result.newState) {
+        setSwitchState(result.newState);
+        if (result.persist) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(result.newState)); } catch {}
+        }
+      }
       if (result.newMode) setMode(result.newMode);
       if (result.newCurrentInterface !== undefined) setCurrentInterface(result.newCurrentInterface);
     }

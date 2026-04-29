@@ -78,7 +78,7 @@ function executePrivilegedMode(cmd, args, raw, state, history) {
   if (cmd === 'write') {
     if (args.length === 0 || args[0] === 'memory' || args[0] === 'mem') {
       const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false };
-      return { output: 'Building configuration...\n[OK]', newState };
+      return { output: 'Building configuration...\n[OK]', newState, persist: true };
     }
     return { output: '% Incomplete command.' };
   }
@@ -383,7 +383,7 @@ function handleCopy(args, state) {
     const dst = args[1].toLowerCase();
     if ((src === 'running-config' || src === 'run') && (dst === 'startup-config' || dst === 'start')) {
       const newState = { ...state, startupConfig: generateRunConfig(state), configChanged: false };
-      return { output: 'Destination filename [startup-config]? \nBuilding configuration...\n[OK]', newState };
+      return { output: 'Destination filename [startup-config]? \nBuilding configuration...\n[OK]', newState, persist: true };
     }
   }
   return { output: '% Incomplete command.' };
