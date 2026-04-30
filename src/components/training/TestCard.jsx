@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, ChevronRight, FlaskConical } from 'lucide-react';
+import { Clock, ChevronRight } from 'lucide-react';
 
 export default function TestCard({ scenario, isActive, onClick }) {
   return (
@@ -13,7 +13,6 @@ export default function TestCard({ scenario, isActive, onClick }) {
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2 min-w-0">
-          <FlaskConical className={`w-3.5 h-3.5 mt-0.5 shrink-0 ${isActive ? 'text-purple-400' : 'text-slate-500'}`} />
           <div className="min-w-0">
             <p className={`text-xs font-medium truncate ${isActive ? 'text-purple-300' : 'text-slate-300'}`}>
               {scenario.title}
