@@ -123,7 +123,7 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
         })()}
 
         {/* Scenario list */}
-        {!activeScenario && !search && tab !== 'tests' && (
+        {!activeScenario && !search && (tab === 'config' || tab === 'troubleshoot') && (
           <div className="p-3 space-y-2">
             {(tab === 'config' ? scenarios : troubleshootingScenarios).map(scenario => (
               <ScenarioCard
