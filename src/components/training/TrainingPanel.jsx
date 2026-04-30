@@ -12,24 +12,32 @@ const allScenarios = [...scenarios, ...troubleshootingScenarios, ...testScenario
 export default function TrainingPanel({ switchState, onLoadScenario }) {
   const [activeScenarioId, setActiveScenarioId] = useState(null);
   const [tab, setTab] = useState('config');
+  const [labStarted, setLabStarted] = useState(false);
 
   const activeScenario = allScenarios.find(s => s.id === activeScenarioId);
 
   const validationResults = useMemo(() => {
-    if (!activeScenario || !switchState) return null;
+    if (!activeScenario || !switchState || !labStarted) return null;
     return activeScenario.validation(switchState);
-  }, [activeScenario, switchState]);
+  }, [activeScenario, switchState, labStarted]);
 
   const handleStart = () => {
     if (!activeScenario) return;
     const state = activeScenario.initialState || createDefaultSwitchState();
     onLoadScenario(state);
+    setLabStarted(true);
   };
 
   const handleReset = () => {
     const state = createDefaultSwitchState();
     onLoadScenario(state);
     setActiveScenarioId(null);
+    setLabStarted(false);
+  };
+
+  const handleSelectScenario = (id) => {
+    setActiveScenarioId(id);
+    setLabStarted(false);
   };
 
   return (
@@ -75,7 +83,7 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
                 key={scenario.id}
                 scenario={scenario}
                 isActive={activeScenarioId === scenario.id}
-                onClick={() => setActiveScenarioId(scenario.id)}
+                onClick={() => handleSelectScenario(scenario.id)}
               />
             ))}
           </div>
@@ -92,7 +100,7 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
                 key={scenario.id}
                 scenario={scenario}
                 isActive={activeScenarioId === scenario.id}
-                onClick={() => setActiveScenarioId(scenario.id)}
+                onClick={() => handleSelectScenario(scenario.id)}
               />
             ))}
           </div>
@@ -102,7 +110,7 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
         {activeScenario && (
           <div className="p-4">
             <button
-              onClick={() => setActiveScenarioId(null)}
+              onClick={() => { setActiveScenarioId(null); setLabStarted(false); }}
               className="text-[10px] text-slate-500 hover:text-slate-300 mb-3 flex items-center gap-1"
             >
               ← Back to scenarios
