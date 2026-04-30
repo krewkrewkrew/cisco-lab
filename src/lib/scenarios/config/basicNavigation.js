@@ -11,13 +11,6 @@ export default {
     'Return to Privileged EXEC mode using "end"',
     'View the running configuration',
   ],
-  hints: [
-    'Start by typing "enable" to enter Privileged EXEC mode',
-    'Use "configure terminal" or "conf t" to enter config mode',
-    'Use "hostname MySwitch" to change the name',
-    'Type "end" to return to Privileged EXEC',
-    'Use "show running-config" to verify your changes',
-  ],
   commands: [
     { cmd: 'enable', why: 'Moves from User EXEC (Switch>) to Privileged EXEC (Switch#). You must do this before entering configuration mode.' },
     { cmd: 'configure terminal', why: 'Enters Global Configuration mode (Switch(config)#). All device-wide settings are made from here.' },

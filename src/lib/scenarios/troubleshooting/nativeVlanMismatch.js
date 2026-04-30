@@ -10,12 +10,6 @@ export default {
   objectives: [
     'Correct the native VLAN on Gi0/1 back to VLAN 1',
   ],
-  hints: [
-    '"show interfaces trunk" shows native VLAN per port in the first section',
-    'The native VLAN must match on both ends of a trunk link',
-    'Fix with: "switchport trunk native vlan 1" on the interface',
-    'Or remove the override: "no switchport trunk native vlan" to reset to default',
-  ],
   commands: [
     { cmd: 'show interfaces trunk', why: 'The "Native vlan" column reveals the mismatch — Gi0/1 shows 99, Gi0/2 shows 1. This causes STP errors and unexpected flooding.' },
     { cmd: 'show running-config', why: 'Confirms "switchport trunk native vlan 99" is explicitly set on Gi0/1.' },

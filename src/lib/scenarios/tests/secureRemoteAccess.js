@@ -18,15 +18,6 @@ export default {
     'Shutdown unused ports Fa0/13 through Fa0/24',
     'Save the configuration',
   ],
-  hints: [
-    'Domain name first — RSA key generation requires it: "ip domain-name corp.local"',
-    'Generate keys: "crypto key generate rsa" — choose 1024 bit when prompted',
-    'SSH version: "ip ssh version 2" in global config',
-    'Create user: "username admin password Cisco123"',
-    'VTY lines: "line vty 0 15" → "transport input ssh" → "login local"',
-    'Enable secret: "enable secret Secure@123"',
-    'Shutdown ports: enter each interface and run "shutdown"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

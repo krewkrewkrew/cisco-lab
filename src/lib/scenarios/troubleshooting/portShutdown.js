@@ -11,12 +11,6 @@ export default {
     'Bring Fa0/3 back up with "no shutdown"',
     'Bring Fa0/5 back up with "no shutdown"',
   ],
-  hints: [
-    '"show ip interface brief" shows all ports and their status at a glance',
-    'Look for "administratively down" in the Status column',
-    'Enter interface config: "interface fa0/3" then "no shutdown"',
-    'Repeat the process for Fa0/5',
-  ],
   commands: [
     { cmd: 'show ip interface brief', why: 'First step in port troubleshooting — shows every interface status. "administratively down" means someone ran the shutdown command on it.' },
     { cmd: 'enable', why: 'You must be in Privileged EXEC mode to enter configuration mode.' },

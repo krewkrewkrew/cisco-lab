@@ -13,12 +13,6 @@ export default {
     'Disable CDP globally',
     'Save the hardened configuration',
   ],
-  hints: [
-    'Use "enable secret Str0ngPass!" in global config mode',
-    'Enter each interface individually: "interface fa0/13" then "shutdown"',
-    'Disable CDP with "no cdp run" in global config',
-    'Save with "copy running-config startup-config"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

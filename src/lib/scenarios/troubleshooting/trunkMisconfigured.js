@@ -13,12 +13,6 @@ export default {
     'Configure Gi0/1 as a trunk port',
     'Configure Gi0/2 as a trunk port',
   ],
-  hints: [
-    '"show interfaces trunk" shows only trunk ports — if it\'s empty, no trunks are configured',
-    '"show ip interface brief" shows both Gi ports are up but not trunking',
-    'Create VLANs first so the trunk has something to carry',
-    'Set "switchport mode trunk" on each uplink interface',
-  ],
   commands: [
     { cmd: 'show interfaces trunk', why: 'If this output is empty, no trunk ports exist — all inter-VLAN traffic between switches is blocked.' },
     { cmd: 'show ip interface brief', why: 'Confirms both Gi ports are physically up but not configured as trunks.' },

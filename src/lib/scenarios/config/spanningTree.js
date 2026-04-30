@@ -11,13 +11,6 @@ export default {
     'Enable PortFast on Fa0/1',
     'Enable BPDU Guard on Fa0/1',
   ],
-  hints: [
-    'Change STP mode: "spanning-tree mode rapid-pvst" in global config',
-    'Create VLAN 10 first before setting STP priority for it',
-    'Set priority: "spanning-tree vlan 10 priority 4096" (must be a multiple of 4096)',
-    'Enter Fa0/1 and use "spanning-tree portfast" to skip listening/learning states',
-    'Add "spanning-tree bpduguard enable" on the same interface',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

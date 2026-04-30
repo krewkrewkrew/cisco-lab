@@ -11,13 +11,6 @@ export default {
     'Set violation mode to "shutdown" on Fa0/1',
     'Repeat port security configuration on Fa0/2',
   ],
-  hints: [
-    'Port must be in access mode before enabling port security',
-    'Use "switchport port-security" to enable it',
-    'Use "switchport port-security maximum 1" to allow only one device',
-    'Use "switchport port-security mac-address sticky" for dynamic learning',
-    'Use "switchport port-security violation shutdown" to shut down on violation',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

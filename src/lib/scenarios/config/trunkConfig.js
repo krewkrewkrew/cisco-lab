@@ -11,13 +11,6 @@ export default {
     'Add descriptions to both trunk interfaces',
     'Verify with "show interfaces trunk"',
   ],
-  hints: [
-    'First create the VLANs in config mode',
-    'Enter interface config: "interface gi0/1"',
-    'Set trunk mode: "switchport mode trunk"',
-    'Add description: "description Uplink to Core Switch"',
-    'Repeat for Gi0/2, then verify with "show interfaces trunk"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

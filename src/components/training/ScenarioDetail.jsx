@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, Circle, RotateCcw } from 'lucide-react';
 import CommandGuide from './CommandGuide';
-import ContextHint from './ContextHint';
 
 export default function ScenarioDetail({ scenario, validationResults, onStart, onReset }) {
   const allPassed = validationResults?.length > 0 && validationResults.every(r => r.pass);
@@ -63,9 +62,6 @@ export default function ScenarioDetail({ scenario, validationResults, onStart, o
           </p>
         </div>
       )}
-
-      {/* Context-aware hint for current failing objective */}
-      <ContextHint scenario={scenario} validationResults={validationResults} />
 
       {/* Command Guide */}
       <CommandGuide commands={scenario.commands} />

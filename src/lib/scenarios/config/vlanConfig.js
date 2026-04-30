@@ -11,13 +11,6 @@ export default {
     'Assign FastEthernet0/7 through Fa0/12 to VLAN 20',
     'Verify with "show vlan brief"',
   ],
-  hints: [
-    'Enter config mode, then use "vlan 10" to create a VLAN',
-    'Use "name SALES" inside VLAN config mode, then "exit" back to global config',
-    'Use "interface fa0/1" then "switchport mode access" then "switchport access vlan 10"',
-    'Repeat for each port you want to assign',
-    'Use "show vlan brief" to verify assignments',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode before making changes.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

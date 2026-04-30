@@ -10,12 +10,6 @@ export default {
     'Set Gi0/1 description to "Uplink to Router"',
     'Verify with "show ip interface brief"',
   ],
-  hints: [
-    'Enter interface config mode for each interface',
-    'Use "shutdown" to disable a port',
-    'Use "description Server Room Link" to add descriptions',
-    'Use "show ip interface brief" to check status',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

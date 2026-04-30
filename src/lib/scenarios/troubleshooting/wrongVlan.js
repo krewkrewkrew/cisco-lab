@@ -12,12 +12,6 @@ export default {
     'Move Fa0/4 to VLAN 10',
     'Confirm Fa0/4 is no longer on VLAN 99',
   ],
-  hints: [
-    '"show vlan brief" lists all VLANs and their port assignments',
-    'A port on a non-existent VLAN will have its line protocol down',
-    'Create the correct VLAN first with "vlan 10" then "name OFFICE"',
-    'Then reassign the port: "interface fa0/4" → "switchport access vlan 10"',
-  ],
   commands: [
     { cmd: 'show vlan brief', why: "First look — lists all VLANs and their port members. Fa0/4 will NOT appear here because VLAN 99 does not exist." },
     { cmd: 'show ip interface brief', why: "Shows Fa0/4 line protocol is down — a dead giveaway that its assigned VLAN doesn't exist." },

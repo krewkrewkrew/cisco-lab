@@ -17,15 +17,6 @@ export default {
     'Set default gateway to 10.0.0.254',
     'Save the fixed configuration',
   ],
-  hints: [
-    '"show ip interface brief" reveals all interface states at a glance',
-    '"show vlan brief" shows which VLANs exist — check if VLAN 50 is listed',
-    'Ports assigned to a missing VLAN will show protocol as "down"',
-    'Fix missing VLAN: "vlan 50" → "name USERS"',
-    'Fix shut uplink: "interface Gi0/1" → "no shutdown"',
-    'Fix SVI: "interface vlan 1" → "ip address 10.0.0.1 255.255.255.0" → "no shutdown"',
-    'Set gateway: "ip default-gateway 10.0.0.254" in global config',
-  ],
   commands: [
     { cmd: 'show ip interface brief', why: 'Get a quick overview of all interface states — spot the down ones fast.' },
     { cmd: 'show vlan brief', why: 'Confirm which VLANs exist. If VLAN 50 is missing, ports in it will be down.' },

@@ -17,13 +17,6 @@ export default {
     'Set default gateway to 192.168.99.254',
     'Save the running configuration',
   ],
-  hints: [
-    'Create VLANs one at a time: "vlan 10" then "name SALES" inside vlan config mode',
-    'To assign ports, enter each interface and use "switchport mode access" then "switchport access vlan 10"',
-    'The SVI is configured with "interface vlan 99" then "ip address 192.168.99.1 255.255.255.0" and "no shutdown"',
-    'Default gateway is set in global config: "ip default-gateway 192.168.99.254"',
-    'Save with "copy running-config startup-config" or "write memory"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

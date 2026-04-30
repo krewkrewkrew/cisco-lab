@@ -11,13 +11,6 @@ export default {
     'Configure VTY lines to use local login and SSH only',
     'Verify with "show ip ssh"',
   ],
-  hints: [
-    'Set domain name first: "ip domain-name lab.local" in global config',
-    'Generate keys: "crypto key generate rsa" — enter 1024 when prompted',
-    'Create user: "username admin password cisco123"',
-    'Enter "line vty 0 4" then "login local" then "transport input ssh"',
-    'Verify SSH is enabled: "show ip ssh"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

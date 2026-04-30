@@ -10,12 +10,6 @@ export default {
     'Save the configuration using "copy running-config startup-config"',
     'Verify with "show startup-config"',
   ],
-  hints: [
-    'Make your changes in config mode first',
-    'Return to privileged EXEC mode with "end"',
-    'Use "copy running-config startup-config" or "write memory"',
-    'Verify with "show startup-config"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

@@ -15,13 +15,6 @@ export default {
     'Set Gi0/2 to trunk mode with allowed VLANs 10,20,99',
     'Set Gi0/2 native VLAN to 99',
   ],
-  hints: [
-    'Create each VLAN first with "vlan <id>" in global config mode',
-    'Hostname is changed with "hostname Branch-SW1" in global config',
-    'Trunk setup: "switchport mode trunk", then "switchport trunk allowed vlan 10,20,99"',
-    'Set native VLAN with "switchport trunk native vlan 99"',
-    'Apply the same trunk config to both Gi0/1 and Gi0/2',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

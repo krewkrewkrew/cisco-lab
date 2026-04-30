@@ -9,12 +9,6 @@ export default {
     'Configure Gi0/2 in LACP active mode, channel-group 1',
     'Verify the EtherChannel bundle with "show etherchannel summary"',
   ],
-  hints: [
-    'Both interfaces must have identical configuration before bundling',
-    'LACP active mode initiates negotiation: "channel-group 1 mode active"',
-    'Apply the same command to both Gi0/1 and Gi0/2',
-    'Verify with "show etherchannel summary" — look for the (SU) flag meaning layer2 + in-use',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },

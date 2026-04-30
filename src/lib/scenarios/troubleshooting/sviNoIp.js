@@ -11,12 +11,6 @@ export default {
     'Set VTY password to "cisco123"',
     'Enable VTY login',
   ],
-  hints: [
-    '"show ip interface brief" shows Vlan1 with "unassigned" for its IP',
-    'Enter "interface vlan 1" then "ip address 192.168.1.10 255.255.255.0"',
-    'Set the gateway in global config: "ip default-gateway 192.168.1.1"',
-    'Configure VTY: "line vty 0 4" → "password cisco123" → "login"',
-  ],
   commands: [
     { cmd: 'show ip interface brief', why: 'Confirms Vlan1 has "unassigned" IP — no IP means no remote management is possible.' },
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },

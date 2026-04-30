@@ -11,13 +11,6 @@ export default {
     'Set VTP version to 2',
     'Verify with "show vtp status"',
   ],
-  hints: [
-    'All VTP commands start with "vtp" in global config mode',
-    'Set domain first: "vtp domain CORP"',
-    'Set mode: "vtp mode server"',
-    'Set password: "vtp password vtp123"',
-    'Verify: "show vtp status"',
-  ],
   commands: [
     { cmd: 'enable', why: 'Enter Privileged EXEC mode.' },
     { cmd: 'configure terminal', why: 'Enter Global Configuration mode.' },
