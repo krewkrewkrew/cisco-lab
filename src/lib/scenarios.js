@@ -1,2 +1,2 @@
 // Re-export from modular structure — edit individual files in lib/scenarios/
-export { scenarios, troubleshootingScenarios } from './scenarios/index';
+export { scenarios, troubleshootingScenarios, testScenarios } from './scenarios/index';

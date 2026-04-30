@@ -1,0 +1,48 @@
+import { createDefaultSwitchState } from '../../switchState';
+
+export default {
+  id: 'test-branch-uplink',
+  title: 'Branch Office Uplink Setup',
+  category: 'test',
+  difficulty: 'Intermediate',
+  duration: '20 min',
+  description: 'A branch office switch needs to connect to the core network. Configure both GigabitEthernet uplinks as trunk ports carrying VLANs 10, 20, and 99, with VLAN 99 as the native VLAN. Also rename the switch hostname to "Branch-SW1".',
+  objectives: [
+    'Create VLANs 10, 20, and 99',
+    'Rename hostname to Branch-SW1',
+    'Set Gi0/1 to trunk mode with allowed VLANs 10,20,99',
+    'Set Gi0/1 native VLAN to 99',
+    'Set Gi0/2 to trunk mode with allowed VLANs 10,20,99',
+    'Set Gi0/2 native VLAN to 99',
+  ],
+  hints: [
+    'Create each VLAN first with "vlan <id>" in global config mode',
+    'Hostname is changed with "hostname Branch-SW1" in global config',
+    'Trunk setup: "switchport mode trunk", then "switchport trunk allowed vlan 10,20,99"',
+    'Set native VLAN with "switchport trunk native vlan 99"',
+    'Apply the same trunk config to both Gi0/1 and Gi0/2',
+  ],
+  commands: [
+    { cmd: 'hostname Branch-SW1', why: 'Rename the switch to identify it on the network.' },
+    { cmd: 'vlan 10', why: 'Create VLAN 10.' },
+    { cmd: 'vlan 20', why: 'Create VLAN 20.' },
+    { cmd: 'vlan 99', why: 'Create VLAN 99 which will serve as the native VLAN.' },
+    { cmd: 'interface GigabitEthernet0/1', why: 'Enter config for the first uplink.' },
+    { cmd: 'switchport mode trunk', why: 'Force the uplink into trunk mode to carry multiple VLANs.' },
+    { cmd: 'switchport trunk allowed vlan 10,20,99', why: 'Restrict the trunk to only carry the needed VLANs.' },
+    { cmd: 'switchport trunk native vlan 99', why: 'Set the native VLAN to 99 so untagged frames use the management VLAN.' },
+    { cmd: 'interface GigabitEthernet0/2', why: 'Enter config for the second uplink.' },
+    { cmd: 'switchport mode trunk', why: 'Trunk the second uplink as well for redundancy.' },
+    { cmd: 'switchport trunk allowed vlan 10,20,99', why: 'Same VLAN policy on both uplinks.' },
+    { cmd: 'switchport trunk native vlan 99', why: 'Match the native VLAN on both trunk links to avoid STP issues.' },
+  ],
+  validation: (state) => [
+    { label: 'VLANs 10, 20, 99 exist', pass: !!state.vlans[10] && !!state.vlans[20] && !!state.vlans[99] },
+    { label: 'Hostname set to Branch-SW1', pass: state.hostname === 'Branch-SW1' },
+    { label: 'Gi0/1 is in trunk mode', pass: state.interfaces['GigabitEthernet0/1']?.switchportMode === 'trunk' },
+    { label: 'Gi0/1 native VLAN is 99', pass: state.interfaces['GigabitEthernet0/1']?.nativeVlan === 99 },
+    { label: 'Gi0/2 is in trunk mode', pass: state.interfaces['GigabitEthernet0/2']?.switchportMode === 'trunk' },
+    { label: 'Gi0/2 native VLAN is 99', pass: state.interfaces['GigabitEthernet0/2']?.nativeVlan === 99 },
+  ],
+  initialState: createDefaultSwitchState(),
+};

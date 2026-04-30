@@ -1,3 +1,9 @@
+// Test scenarios
+import officeVlan from './tests/officeVlan';
+import branchUplink from './tests/branchUplink';
+import secureRemoteAccess from './tests/secureRemoteAccess';
+import fullOutage from './tests/fullOutage';
+
 // Config labs
 import basicNavigation from './config/basicNavigation';
 import vlanConfig from './config/vlanConfig';
@@ -38,4 +44,11 @@ export const troubleshootingScenarios = [
   sviNoIp,
   nativeVlanMismatch,
   securityHardening,
+];
+
+export const testScenarios = [
+  officeVlan,
+  branchUplink,
+  secureRemoteAccess,
+  fullOutage,
 ];
