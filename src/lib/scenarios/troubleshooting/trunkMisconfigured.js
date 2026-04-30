@@ -8,12 +8,10 @@ export default {
   duration: '15 min',
   description: 'Inter-VLAN traffic between switches is broken. Gi0/1 is set to access mode instead of trunk, and VLAN 10 and 20 are missing. Diagnose and fix the uplink.',
   objectives: [
-    'Use "show interfaces trunk" to confirm no trunks are active',
-    'Use "show interfaces Gi0/1 switchport" to see the misconfiguration',
-    'Create VLAN 10 and VLAN 20',
+    'Create VLAN 10',
+    'Create VLAN 20',
     'Configure Gi0/1 as a trunk port',
     'Configure Gi0/2 as a trunk port',
-    'Verify with "show interfaces trunk"',
   ],
   hints: [
     '"show interfaces trunk" shows only trunk ports — if it\'s empty, no trunks are configured',

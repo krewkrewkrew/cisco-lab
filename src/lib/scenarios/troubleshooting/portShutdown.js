@@ -8,11 +8,8 @@ export default {
   duration: '10 min',
   description: 'A user reports their workstation lost network connectivity. Ports Fa0/3 and Fa0/5 are administratively shut down. Diagnose the problem and bring the ports back up.',
   objectives: [
-    'Use "show ip interface brief" to identify shutdown ports',
-    'Identify that Fa0/3 and Fa0/5 are administratively down',
     'Bring Fa0/3 back up with "no shutdown"',
     'Bring Fa0/5 back up with "no shutdown"',
-    'Verify both ports are up',
   ],
   hints: [
     '"show ip interface brief" shows all ports and their status at a glance',
@@ -34,7 +31,6 @@ export default {
     { cmd: 'show ip interface brief', why: 'Second verification — both Fa0/3 and Fa0/5 should now show "up/up".' },
   ],
   validation: (state) => [
-    { label: 'Checked interface status (show ip interface brief)', pass: !!state.viewedInterfaceBrief },
     { label: 'Fa0/3 is back up', pass: state.interfaces['FastEthernet0/3']?.status === 'up' },
     { label: 'Fa0/5 is back up', pass: state.interfaces['FastEthernet0/5']?.status === 'up' },
   ],

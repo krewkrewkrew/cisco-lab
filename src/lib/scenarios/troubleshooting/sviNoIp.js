@@ -6,11 +6,10 @@ export default {
   duration: '15 min',
   description: "The network team can't SSH into the switch. The management VLAN interface (Vlan1) has no IP address configured. Set up remote management access.",
   objectives: [
-    'Use "show ip interface brief" to see Vlan1 has no IP',
     'Assign IP address 192.168.1.10/24 to Vlan1',
     'Configure a default gateway of 192.168.1.1',
-    'Set up VTY password "cisco123" and enable login',
-    'Verify with "show running-config"',
+    'Set VTY password to "cisco123"',
+    'Enable VTY login',
   ],
   hints: [
     '"show ip interface brief" shows Vlan1 with "unassigned" for its IP',

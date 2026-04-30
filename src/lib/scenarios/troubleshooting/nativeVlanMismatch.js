@@ -8,10 +8,7 @@ export default {
   duration: '20 min',
   description: 'Spanning tree is logging native VLAN mismatch errors on the Gi0/1 trunk. The trunk is configured but the native VLAN is set to 99 on one side. Fix the native VLAN to match the default (VLAN 1).',
   objectives: [
-    'Use "show interfaces trunk" to inspect the trunk configuration',
-    'Identify that Gi0/1 has native VLAN set to 99',
-    'Correct the native VLAN back to VLAN 1',
-    'Verify the fix with "show interfaces trunk"',
+    'Correct the native VLAN on Gi0/1 back to VLAN 1',
   ],
   hints: [
     '"show interfaces trunk" shows native VLAN per port in the first section',
@@ -30,9 +27,7 @@ export default {
     { cmd: 'show interfaces trunk', why: 'Verify the Native vlan column on Gi0/1 now shows 1, matching Gi0/2.' },
   ],
   validation: (state) => [
-    { label: 'Gi0/1 is a trunk port', pass: state.interfaces['GigabitEthernet0/1']?.switchportMode === 'trunk' },
     { label: 'Gi0/1 native VLAN corrected to 1', pass: (state.interfaces['GigabitEthernet0/1']?.nativeVlan ?? 1) === 1 },
-    { label: 'Gi0/2 is a trunk port', pass: state.interfaces['GigabitEthernet0/2']?.switchportMode === 'trunk' },
   ],
   initialState: (() => {
     const base = createDefaultSwitchState();

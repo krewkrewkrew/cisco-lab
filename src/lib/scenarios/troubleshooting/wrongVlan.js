@@ -8,11 +8,9 @@ export default {
   duration: '15 min',
   description: "A workstation on Fa0/4 is on VLAN 99 (which doesn't exist), so it can't communicate. Fix the port assignment and verify connectivity.",
   objectives: [
-    'Use "show vlan brief" to identify the misconfiguration',
-    'Identify that Fa0/4 is assigned to non-existent VLAN 99',
     'Create VLAN 10 named "OFFICE"',
     'Move Fa0/4 to VLAN 10',
-    'Verify with "show vlan brief"',
+    'Confirm Fa0/4 is no longer on VLAN 99',
   ],
   hints: [
     '"show vlan brief" lists all VLANs and their port assignments',

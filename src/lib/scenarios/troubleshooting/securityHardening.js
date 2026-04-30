@@ -7,7 +7,9 @@ export default {
   description: 'A security audit found several issues: no enable secret, unused ports are up, and CDP is enabled globally. Harden the switch configuration.',
   objectives: [
     'Set an enable secret password: "Str0ngPass!"',
-    'Shut down all unused ports (Fa0/13 through Fa0/24)',
+    'Shut down Fa0/13 (first unused port)',
+    'Shut down Fa0/18 (mid-range check)',
+    'Shut down Fa0/24 (last unused port)',
     'Disable CDP globally',
     'Save the hardened configuration',
   ],
