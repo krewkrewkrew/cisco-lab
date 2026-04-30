@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Circle, RotateCcw, Gamepad2 } from 'lucide-react';
+import { RotateCcw, Gamepad2 } from 'lucide-react';
 import CommandGuide from './CommandGuide';
 
 function FreeplayDetail({ scenario, onStart, onReset }) {
@@ -96,11 +96,6 @@ export default function ScenarioDetail({ scenario, validationResults, onStart, o
             const passed = result?.pass;
             return (
               <div key={i} className="flex items-start gap-2">
-                {passed ? (
-                  <Circle className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" style={{ fill: 'currentColor' }} />
-                ) : (
-                  <Circle className="w-3.5 h-3.5 text-slate-600 mt-0.5 shrink-0" />
-                )}
                 <span className={`text-xs leading-relaxed ${passed ? 'text-emerald-400' : 'text-slate-400'}`}>
                   {obj}
                 </span>
