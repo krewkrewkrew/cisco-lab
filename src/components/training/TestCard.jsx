@@ -1,12 +1,5 @@
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
 import { Clock, ChevronRight, FlaskConical } from 'lucide-react';
-
-const difficultyColor = {
-  Beginner: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-  Intermediate: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-  Advanced: 'text-red-400 bg-red-500/10 border-red-500/20',
-};
 
 export default function TestCard({ scenario, isActive, onClick }) {
   return (
@@ -29,9 +22,6 @@ export default function TestCard({ scenario, isActive, onClick }) {
               {scenario.description}
             </p>
             <div className="flex items-center gap-2 mt-1.5">
-              <span className={`text-[9px] px-1.5 py-0.5 rounded border font-medium ${difficultyColor[scenario.difficulty] || difficultyColor.Intermediate}`}>
-                {scenario.difficulty}
-              </span>
               <span className="flex items-center gap-1 text-[9px] text-slate-600">
                 <Clock className="w-2.5 h-2.5" />
                 {scenario.duration}
