@@ -46,8 +46,7 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
       {/* Header */}
       <div className="px-4 py-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-accent" />
-          <h2 className="text-sm font-semibold text-slate-200">Training Labs</h2>
+<h2 className="text-sm font-semibold text-slate-200">Training Labs</h2>
         </div>
         <p className="text-[10px] text-slate-500 mt-1">Select a scenario to practice Cisco IOS commands</p>
         {/* Search */}
