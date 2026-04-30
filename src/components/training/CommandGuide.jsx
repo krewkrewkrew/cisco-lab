@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Terminal, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
 
 export default function CommandGuide({ commands }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(null);
 
   if (!commands?.length) return null;
