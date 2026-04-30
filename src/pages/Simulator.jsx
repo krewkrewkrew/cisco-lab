@@ -38,6 +38,18 @@ export default function Simulator() {
           <div className="h-4 w-px bg-slate-700/50" />
           <span className="text-xs text-slate-400 font-mono">cisco-ios-simulator</span>
         </div>
+        {/* SRC Branding */}
+        <a href="https://www.scires.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 opacity-75 hover:opacity-100 transition-opacity group">
+          {/* SRC shield-style logo mark */}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="4" fill="#1a4fa0" />
+            <text x="14" y="20" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="bold" fontSize="11" fill="white" letterSpacing="0.5">SRC</text>
+          </svg>
+          <div className="flex flex-col leading-none">
+            <span className="text-[10px] font-bold text-blue-400 tracking-widest uppercase">Scientific Research</span>
+            <span className="text-[8px] text-slate-500 tracking-widest uppercase">Corporation</span>
+          </div>
+        </a>
         <button
           onClick={() => setPanelOpen(!panelOpen)}
           className="text-slate-500 hover:text-slate-300 transition-colors p-1"
