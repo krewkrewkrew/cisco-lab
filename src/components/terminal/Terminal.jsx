@@ -143,7 +143,7 @@ export default function Terminal({ onStateChange, onModeChange, externalState })
       ref={scrollRef}
       onClick={handleContainerClick}
       className="h-full overflow-y-auto terminal-scroll p-4 font-mono text-sm cursor-text"
-      style={{ backgroundColor: '#0D1117' }}
+      style={{ backgroundColor: 'transparent' }}
     >
       <TerminalOutput lines={outputLines} />
       {booted && (
