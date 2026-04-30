@@ -1,3 +1,6 @@
+// Freeplay
+import freeplay from './freeplay';
+
 // Test scenarios
 import officeVlan from './tests/officeVlan';
 import branchUplink from './tests/branchUplink';
@@ -52,3 +55,5 @@ export const testScenarios = [
   secureRemoteAccess,
   fullOutage,
 ];
+
+export { freeplay };

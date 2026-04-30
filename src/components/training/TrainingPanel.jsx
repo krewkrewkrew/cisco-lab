@@ -1,13 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { scenarios, troubleshootingScenarios, testScenarios } from '@/lib/scenarios';
+import { scenarios, troubleshootingScenarios, testScenarios, freeplay } from '@/lib/scenarios';
 import ScenarioCard from './ScenarioCard';
 import ScenarioDetail from './ScenarioDetail';
 import TestCard from './TestCard';
+import FreeplayCard from './FreeplayCard';
 import { createDefaultSwitchState } from '@/lib/switchState';
-import { BookOpen, Terminal as TerminalIcon, Wrench, FlaskConical, Search, X } from 'lucide-react';
+import { BookOpen, Terminal as TerminalIcon, Wrench, FlaskConical, Search, X, Gamepad2 } from 'lucide-react';
 import VlanStatusPanel from './VlanStatusPanel';
 
-const allScenarios = [...scenarios, ...troubleshootingScenarios, ...testScenarios];
+const allScenarios = [...scenarios, ...troubleshootingScenarios, ...testScenarios, freeplay];
 
 export default function TrainingPanel({ switchState, onLoadScenario }) {
   const [activeScenarioId, setActiveScenarioId] = useState(null);
@@ -88,6 +89,12 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
             >
               <FlaskConical className="w-3 h-3" /> Tests
             </button>
+            <button
+              onClick={() => setTab('freeplay')}
+              className={`flex-1 flex items-center justify-center gap-1 py-1 text-[10px] rounded font-medium transition-colors ${tab === 'freeplay' ? 'bg-emerald-500/20 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
+            >
+              <Gamepad2 className="w-3 h-3" /> Free
+            </button>
           </div>
         )}
       </div>
@@ -143,6 +150,20 @@ export default function TrainingPanel({ switchState, onLoadScenario }) {
                 onClick={() => handleSelectScenario(scenario.id)}
               />
             ))}
+          </div>
+        )}
+
+        {/* Freeplay tab */}
+        {!activeScenario && !search && tab === 'freeplay' && (
+          <div className="p-3 space-y-3">
+            <div className="text-[10px] text-emerald-400/70 bg-emerald-500/5 border border-emerald-500/10 rounded p-2 leading-relaxed">
+              A fully pre-configured switch with 4 VLANs, 18 endpoints, trunk uplinks, SSH, and realistic traffic. No objectives — explore freely.
+            </div>
+            <FreeplayCard
+              scenario={freeplay}
+              isActive={activeScenarioId === freeplay.id}
+              onClick={() => handleSelectScenario(freeplay.id)}
+            />
           </div>
         )}
 
