@@ -1,7 +1,5 @@
 import React from 'react';
-import { Clock, ChevronRight, Wrench } from 'lucide-react';
-
-const isTroubleshooting = (scenario) => scenario.category === 'troubleshooting';
+import { Clock, ChevronRight } from 'lucide-react';
 
 export default function ScenarioCard({ scenario, isActive, onClick }) {
   return (
@@ -16,7 +14,6 @@ export default function ScenarioCard({ scenario, isActive, onClick }) {
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            {isTroubleshooting(scenario) && <Wrench className="w-3 h-3 text-amber-400 shrink-0" />}
             <h3 className="text-sm font-medium text-slate-200 group-hover:text-white truncate">
               {scenario.title}
             </h3>
