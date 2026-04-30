@@ -36,7 +36,7 @@ export default function Simulator() {
             <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
           </div>
           <div className="h-4 w-px bg-slate-700/50" />
-          <span className="text-xs text-slate-400 font-mono">cisco-ios-simulator</span>
+          <span className="text-xs text-slate-400 font-mono">Advanced Technological Solutions</span>
         </div>
 
         <button
