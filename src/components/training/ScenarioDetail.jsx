@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, Circle, Lightbulb, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
+import { CheckCircle2, Circle, RotateCcw } from 'lucide-react';
 import CommandGuide from './CommandGuide';
 import ContextHint from './ContextHint';
 
 export default function ScenarioDetail({ scenario, validationResults, onStart, onReset }) {
-  const [showHints, setShowHints] = useState(false);
-  const [revealedHints, setRevealedHints] = useState(0);
-
   const allPassed = validationResults?.length > 0 && validationResults.every(r => r.pass);
-
-  const revealNextHint = () => {
-    setRevealedHints(prev => Math.min(prev + 1, scenario.hints.length));
-  };
 
   return (
     <div className="space-y-4">
@@ -77,34 +70,7 @@ export default function ScenarioDetail({ scenario, validationResults, onStart, o
       {/* Command Guide */}
       <CommandGuide commands={scenario.commands} />
 
-      {/* Hints */}
-      <div>
-        <button
-          onClick={() => setShowHints(!showHints)}
-          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors"
-        >
-          <Lightbulb className="w-3 h-3" />
-          <span>Hints</span>
-          {showHints ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-        </button>
-        {showHints && (
-          <div className="mt-2 space-y-1.5">
-            {scenario.hints.slice(0, revealedHints).map((hint, i) => (
-              <div key={i} className="text-xs text-amber-400/80 pl-4 border-l border-amber-500/20">
-                {hint}
-              </div>
-            ))}
-            {revealedHints < scenario.hints.length && (
-              <button
-                onClick={revealNextHint}
-                className="text-[10px] text-slate-500 hover:text-amber-400 pl-4 transition-colors"
-              >
-                Reveal next hint →
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+
     </div>
   );
 }
