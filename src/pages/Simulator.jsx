@@ -64,18 +64,12 @@ export default function Simulator() {
         <div className={`flex flex-col transition-all duration-300 relative ${panelOpen ? 'w-[70%]' : 'w-full'}`}>
           {/* SRC watermark logo */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-            <svg width="320" height="120" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.055 }}>
-              {/* SRC shield/emblem */}
-              <circle cx="52" cy="52" r="48" fill="none" stroke="white" strokeWidth="3" />
-              <text x="52" y="38" textAnchor="middle" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="30" fill="white" letterSpacing="1">SRC</text>
-              <line x1="16" y1="48" x2="88" y2="48" stroke="white" strokeWidth="1.5" />
-              <text x="52" y="65" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="7" fill="white" letterSpacing="2">SCIENTIFIC RESEARCH</text>
-              <text x="52" y="76" textAnchor="middle" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="7" fill="white" letterSpacing="2">CORPORATION</text>
-              {/* Full name text beside */}
-              <text x="116" y="45" fontFamily="Arial Black, Arial, sans-serif" fontWeight="900" fontSize="36" fill="white" letterSpacing="2">SRC</text>
-              <text x="117" y="65" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="11" fill="white" letterSpacing="1.5">SCIENTIFIC RESEARCH</text>
-              <text x="117" y="81" fontFamily="Arial, sans-serif" fontWeight="400" fontSize="11" fill="white" letterSpacing="1.5">CORPORATION</text>
-            </svg>
+            <img
+              src="https://media.base44.com/images/public/69f216b16981978d3ddba26a/f9ebb8e3c_src_logo.png"
+              alt=""
+              className="w-80 select-none"
+              style={{ opacity: 0.07 }}
+            />
           </div>
           <div className="flex-1 overflow-hidden relative z-10">
             <Terminal
