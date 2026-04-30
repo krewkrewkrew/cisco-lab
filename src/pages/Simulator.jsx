@@ -68,7 +68,7 @@ export default function Simulator() {
               src="https://media.base44.com/images/public/69f216b16981978d3ddba26a/f9ebb8e3c_src_logo.png"
               alt=""
               className="w-80 select-none"
-              style={{ opacity: 0.18 }}
+              style={{ opacity: 0.35 }}
             />
           </div>
           <div className="flex-1 overflow-hidden relative z-10">
